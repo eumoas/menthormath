@@ -1,0 +1,328 @@
+PRD - ENEM.AI: Tutor Inteligente para Matemática e Ciências da Natureza do ENEM
+Versão: 2.0
+Data: Setembro 2025
+Autor: [Seu Nome]
+Projeto: TCC - [Seu Curso]
+
+1. Visão e Objetivo
+1.1 Problema Identificado
+O ENEM é a principal porta de entrada para o ensino superior no Brasil, mas os índices de aproveitamento em matemática e ciências da natureza são alarmantemente baixos:
+
+Matemática ENEM 2023: Apenas 12% dos participantes obtiveram nota superior a 600 pontos
+Ciências da Natureza: Média nacional de 475 pontos (abaixo da média geral de 500)
+Desigualdade de acesso: Estudantes de escola pública pontuam, em média, 100 pontos a menos
+Abandono por desmotivação: 35% dos vestibulandos desistem nos primeiros 3 meses de preparação
+Metodologia inadequada: 78% dos estudantes não compreendem o sistema TRI de correção
+
+Principais causas identificadas:
+
+Falta de contextualização dos conceitos com aplicações práticas
+Desconhecimento da estrutura e competências avaliadas no ENEM
+Ansiedade e pressão temporal durante as provas
+Lacunas conceituais acumuladas desde o ensino fundamental
+Ausência de feedback personalizado sobre pontos de melhoria
+
+1.2 Visão do Produto
+Criar um tutor inteligente especializado em preparação para o ENEM que personaliza o aprendizado de matemática e ciências da natureza, utilizando IA para simular o estilo das questões, explicar conceitos de forma contextualizada e preparar estudantes estrategicamente para alcançar suas metas de pontuação no exame.
+1.3 Objetivos Mensuráveis
+
+Objetivo Principal: Aumentar a pontuação média dos usuários em matemática e ciências da natureza em 150 pontos em um período de 4 meses de uso
+Objetivos Específicos:
+
+Melhorar a compreensão das competências ENEM em 80% dos usuários
+Reduzir o tempo médio de resolução por questão em 25%
+Atingir 90% de acerto em questões de nível fácil/médio
+Alcançar 85% de satisfação dos usuários
+Aprovar 60% dos usuários regulares em suas universidades desejadas
+
+
+
+
+2. Público-Alvo e Personas
+2.1 Público Primário
+Estudantes do 3º ano do ensino médio e cursinho pré-vestibular preparando-se para o ENEM
+2.2 Público Secundário
+
+Professores de cursinho
+Pais de vestibulandos
+Coordenadores pedagógicos de escolas
+
+2.3 Personas Principais
+Persona 1: Maria - A Perfeccionista Ansiosa
+
+Idade: 17 anos, 3º ano - escola particular
+Meta: Medicina (nota de corte: 750+)
+Perfil: Excelente em linguagens e humanas, mas trava em exatas
+Dores: "Sei a teoria, mas não consigo resolver as questões", "Fico nervosa com o tempo"
+Necessidades: Estratégias de resolução, controle de ansiedade, prática intensiva
+Tempo disponível: 4-5h/dia para estudos
+Dispositivo: Notebook + celular, internet estável
+
+Persona 2: João - O Estratégico de Última Hora
+
+Idade: 18 anos, cursinho popular
+Meta: Engenharia (nota de corte: 650+)
+Perfil: Inteligente mas procrastinador, começa a estudar sério só 3 meses antes
+Dores: "Qual matéria estudar primeiro?", "Não tenho tempo para tudo"
+Necessidades: Priorização inteligente, foco nos tópicos que mais caem, eficiência
+Tempo disponível: 2-3h/dia (período noturno)
+Dispositivo: Celular Android, dados móveis limitados
+
+Persona 3: Ana - A Guerreira da Escola Pública
+
+Idade: 18 anos, escola pública + trabalho meio período
+Meta: Qualquer federal (nota de corte: 550+)
+Perfil: Primeira da família a tentar universidade, determinada mas com lacunas
+Dores: "Não aprendi direito no ensino médio", "Preciso trabalhar e estudar"
+Necessidades: Nivelamento, explicações do básico, flexibilidade de horário
+Tempo disponível: 1-2h/dia (fins de semana mais)
+Dispositivo: Celular básico, wifi só em casa
+
+Persona 4: Pedro - O Veterano Focado
+
+Idade: 19 anos, segundo ano de cursinho
+Meta: Federal específica (nota de corte: 700+)
+Perfil: Já fez ENEM, sabe suas deficiências, quer otimizar pontuação
+Dores: "Preciso melhorar pontos específicos", "Como quebrar o platô?"
+Necessidades: Análise detalhada de performance, questões de nível avançado
+Tempo disponível: 6-8h/dia
+Dispositivo: Setup completo de estudos
+
+
+3. Funcionalidades Principais
+3.1 MVP (Mínimo Produto Viável)
+F1: Diagnóstico ENEM Inteligente
+Prioridade: Alta
+Descrição: Avaliação completa baseada nas competências oficiais do ENEM
+Critérios de Aceitação:
+
+Simulado diagnóstico com 45 questões (30 matemática + 15 ciências da natureza)
+Análise por competência específica do ENEM
+Identificação de lacunas conceituais por tópico
+Estimativa de pontuação TRI inicial
+Relatório visual com mapa de competências
+Tempo limite: 90 minutos (simulando pressão real)
+
+F2: Gerador de Questões Estilo ENEM
+Prioridade: Alta
+Descrição: IA treinada para criar questões no padrão ENEM com contextualização
+Critérios de Aceitação:
+
+Questões contextualizadas (gráficos, tabelas, situações-problema)
+3 níveis de dificuldade (fácil, médio, difícil) baseados no TRI
+Cobertura de todas as competências matemáticas e de ciências da natureza
+Alternativas plausíveis e distratores inteligentes
+Banco inicial de 1000+ questões únicas
+Geração sob demanda baseada no perfil do estudante
+
+F3: Sistema TRI de Correção e Feedback
+Prioridade: Alta
+Descrição: Simulação do sistema de correção do ENEM com feedback educativo
+Critérios de Aceitação:
+
+Cálculo de pontuação baseado na metodologia TRI
+Explicação detalhada de cada resposta (certa ou errada)
+Identificação do erro conceitual cometido
+Sugestão de tópicos para revisão
+Comparação com desempenho médio nacional
+Feedback motivacional e construtivo
+
+F4: Trilha de Preparação Personalizada
+Prioridade: Alta
+Descrição: Sequenciamento inteligente de estudos baseado no perfil e meta do estudante
+Critérios de Aceitação:
+
+Cronograma adaptativo baseado no tempo até o ENEM
+Priorização de tópicos com maior peso na prova
+Revisão automática de conceitos com baixo desempenho
+Distribuição equilibrada entre matemática e ciências
+Progressão visual tipo "mapa de aventura"
+Flexibilidade para ajustar intensidade de estudos
+
+F5: Simulados Cronometrados
+Prioridade: Alta
+Descrição: Simulação da experiência real da prova do ENEM
+Critérios de Aceitação:
+
+Cronômetro oficial (4h30 para ciências da natureza + matemática)
+Interface similar ao ENEM digital
+Relatório de desempenho temporal por questão
+Análise de estratégia de resolução (tempo por competência)
+Histórico de evolução em simulados
+Sugestões de otimização de tempo
+
+3.2 Funcionalidades Avançadas (Versão 2.0)
+F6: Assistente de Resolução por Voz
+
+Explicação oral passo a passo
+Reconhecimento de voz para dúvidas
+Acessibilidade para diferentes estilos de aprendizagem
+
+F7: Mapa de Calor de Competências
+
+Visualização avançada de forças e fraquezas
+Comparação com perfil de aprovados na universidade desejada
+Projeção de nota necessária por área
+
+F8: Modo Colaborativo de Estudos
+
+Grupos de estudo virtuais
+Desafios entre estudantes
+Ranking motivacional (opcional)
+
+F9: Preparação de Véspera Inteligente
+
+Revisão automática dos pontos fracos
+Resumo de fórmulas essenciais
+Técnicas de controle de ansiedade
+
+
+4. Experiência do Usuário
+4.1 Jornada do Usuário Principal
+Primeiro Acesso (Onboarding)
+
+Boas-vindas motivacionais: "Vamos conquistar sua vaga na universidade dos sonhos!"
+Cadastro do perfil: Nome, idade, escola, universidade desejada, nota de corte
+Diagnóstico inicial: "Vamos descobrir seu nível atual. Relaxa, é só para te conhecer melhor!"
+Apresentação do plano: Cronograma personalizado até o ENEM
+Primeira questão: Exercício adaptado ao nível identificado
+
+Sessão Típica de Estudos
+
+Dashboard motivacional: Dias restantes, progresso atual, meta diária
+Sugestão inteligente: "Que tal continuarmos com função quadrática? Cai muito no ENEM!"
+Aquecimento: Questão de revisão de conceitos anteriores
+Bloco principal: 5-10 questões no nível adequado
+Feedback imediato: Explicação contextualizada de cada resposta
+Progresso celebrado: "Parabéns! Você melhorou 25 pontos em funções esta semana!"
+
+Simulado Completo
+
+Preparação mental: Dicas de estratégia e controle de ansiedade
+Interface ENEM: Ambiente similar à prova oficial
+Cronômetro ativo: Pressão temporal realista
+Análise pós-simulado: Relatório detalhado de performance
+Plano de ação: Ajustes na trilha de estudos baseados no desempenho
+
+4.2 Fluxos Principais
+Fluxo de Questão ENEM
+Seleção Inteligente → Apresentação Contextualizada → 
+Timer Individual → Resposta do Usuário → Feedback TRI → 
+Explicação Detalhada → Próxima Questão/Revisão
+Fluxo de Adaptação de Dificuldade
+Acerto Consistente → Aumenta Complexidade → Questões Nível TRI Superior
+Erro Recorrente → Oferece Revisão Conceitual → Questões de Fixação → Retoma Progressão
+
+5. Arquitetura Técnica
+5.1 Stack Tecnológico
+Backend (n8n + APIs)
+
+Orquestração: n8n para workflows educacionais
+IA Principal: OpenAI GPT-4 fine-tuned com questões ENEM
+IA Complementar: Google Gemini para geração de gráficos/tabelas
+Banco Principal: PostgreSQL (perfis, progresso, questões)
+Cache: Redis para performance em simulados
+Sistema TRI: Algoritmo próprio baseado na metodologia INEP
+
+Frontend Responsivo
+
+Web: Next.js 14 com TypeScript
+Mobile: Progressive Web App (PWA) otimizada
+UI Framework: Tailwind CSS + Shadcn/ui
+Gráficos: Recharts para análises visuais
+Cronômetro: Web Workers para precisão temporal
+
+Dados e Integrações
+
+Base de Questões: Provas ENEM 2009-2024 categorizadas
+APIs Governamentais: INEP para dados oficiais
+Analytics: Mixpanel + Google Analytics 4
+Monitoramento: Sentry para errors + Vercel Analytics
+CDN: Vercel Edge Network para performance global
+
+5.2 Principais Workflows n8n
+Workflow 1: Diagnóstico e Categorização
+Webhook (Respostas do Simulado) → Análise TRI → Cálculo de Competências → 
+Identificação de Lacunas → Geração do Perfil → Criação da Trilha Personalizada
+Workflow 2: Geração Inteligente de Questões
+Trigger (Solicitação de Questão) → Análise do Perfil do Usuário → 
+Seleção de Competência → Prompt para IA → Validação da Questão → 
+Armazenamento → Entrega Formatada
+Workflow 3: Sistema TRI de Avaliação
+Recepção da Resposta → Análise do Padrão de Acertos → 
+Cálculo TRI → Atualização do Nível → Feedback Contextualizado → 
+Ajuste da Trilha de Estudos
+Workflow 4: Relatórios de Progresso
+Trigger Semanal → Coleta de Dados de Performance → 
+Análise de Evolução → Comparação com Metas → 
+Geração de Insights → Envio de Relatório Personalizado
+
+6. Métricas de Sucesso
+6.1 KPIs Principais
+Métricas de Aprendizagem
+
+Evolução TRI: Aumento médio de pontuação por mês de uso
+Taxa de Acerto por Competência: % de acertos em cada área do ENEM
+Redução de Tempo por Questão: Otimização da velocidade de resolução
+Retenção de Conhecimento: % de conceitos mantidos após 30 dias
+Performance em Simulados: Comparação com média nacional
+
+Métricas de Engajamento
+
+Sessões Semanais: Frequência de uso da plataforma
+Questões Resolvidas: Volume de prática por usuário
+Tempo de Sessão: Duração média de estudo
+Taxa de Conclusão de Trilhas: % de cronogramas completados
+Retenção de Usuários: Ativos após 30, 60, 90 dias
+
+Métricas de Impacto
+
+Taxa de Aprovação: % de usuários aprovados nas universidades desejadas
+Melhoria na Nota ENEM: Comparação antes/depois do uso
+NPS Educacional: Recomendação entre vestibulandos
+Redução da Ansiedade: Escala de confiança pré/pós uso
+
+6.2 Validação Científica para TCC
+Metodologia de Pesquisa
+
+Grupo Experimental: 100 estudantes usando ENEM.AI
+Grupo Controle: 100 estudantes com método tradicional
+Pré-teste: Simulado inicial para ambos os grupos
+Período: 4 meses de acompanhamento
+Pós-teste: Simulado final + análise da nota real do ENEM
+
+Métricas de Validação
+
+Diferença Estatisticamente Significativa: p-valor < 0.05
+Tamanho do Efeito: Cohen's d > 0.5 (efeito médio/grande)
+Taxa de Melhoria: Média de pontos ganhos por grupo
+Análise Qualitativa: Entrevistas sobre experiência de uso
+
+
+7. Análise de Competidores
+7.1 Competitors Diretos
+Me Salva!
+
+Forças: Videoaulas populares, professores carismáticos
+Fraquezas: Pouca personalização, sem adaptação por IA
+Diferencial: Nosso sistema adapta-se ao ritmo individual
+
+Descomplica
+
+Forças: Plataforma completa, grande base de usuários
+Fraquezas: Foco em videoaulas, exercícios genéricos
+Diferencial: Questões geradas por IA no estilo ENEM
+
+Stoodi
+
+Forças: Exercícios organizados, relatórios de progresso
+Fraquezas: Interface datada, sem IA avançada
+Diferencial: Sistema TRI real + feedback contextualizado
+
+7.2 Diferencial Competitivo
+Único no mercado:
+
+IA especializada em ENEM - Questões contextualizadas sob demanda
+Sistema TRI real - Pontuação igual ao ENEM oficial
+Personalização extrema - Trilha única para cada perfil
+Feedback pedagógico - Não apenas "certo/errado"

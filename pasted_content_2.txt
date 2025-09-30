@@ -1,0 +1,570 @@
+# Prompt Completo para Implementação do ENEM.AI
+
+## 🎯 Contexto do Projeto
+
+Você é um desenvolvedor sênior especializado em tecnologia educacional. Precisa implementar o **ENEM.AI**, um tutor inteligente para preparação em Matemática e Ciências da Natureza do ENEM. Este é um projeto de TCC com foco em impacto social e validação científica.
+
+## 📋 Stack Tecnológico Definido
+
+- **Frontend:** React.js + Next.js (dashboard estudantil)
+- **Orquestração:** n8n (workflows educacionais)
+- **IA:** OpenAI GPT-4 + fine-tuning com questões ENEM
+- **Banco:** PostgreSQL (questões categorizadas + progresso)
+- **Analytics:** Sistema próprio de tracking de performance
+- **UI:** Design inspirado em apps de vestibular (Me Salva, Descomplica)
+
+## 🎯 Objetivo Principal
+
+Criar um MVP funcional que:
+1. **Diagnostique** lacunas de conhecimento do estudante
+2. **Gere** questões personalizadas estilo ENEM via IA
+3. **Avalie** respostas usando sistema TRI simplificado
+4. **Adapte** dificuldade baseada na performance
+5. **Trackee** progresso para validação científica
+
+## 📊 Funcionalidades Core (MVP)
+
+### 1. Sistema de Diagnóstico Inicial
+- Simulado de 20 questões (15 matemática + 5 ciências)
+- Categorização por competências ENEM
+- Cálculo de nível inicial (Básico/Intermediário/Avançado)
+
+### 2. Gerador de Questões IA
+- Prompts específicos para criar questões estilo ENEM
+- Contextualizadas com gráficos/tabelas/situações reais
+- 3 níveis de dificuldade por competência
+- Validação automática de qualidade
+
+### 3. Sistema TRI Simplificado
+- Algoritmo de pontuação baseado em acertos/erros
+- Feedback educativo sobre cada resposta
+- Cálculo de "nota estimada ENEM"
+
+### 4. Dashboard de Progresso
+- Visualização de competências (radar chart)
+- Histórico de performance
+- Metas e cronograma até o ENEM
+
+## 🏗️ Arquitetura Técnica
+
+```
+Frontend (Next.js) ↔️ API Routes ↔️ n8n Webhooks ↔️ PostgreSQL
+                                     ↕️
+                                 OpenAI API
+```
+
+## 🔧 Implementação Detalhada
+
+### ETAPA 1: Setup Base do Projeto
+```bash
+# Criar projeto Next.js
+npx create-next-app@latest enem-ai --typescript --tailwind --app-dir
+
+# Dependências essenciais
+npm install @prisma/client prisma postgresql recharts lucide-react
+npm install @radix-ui/react-dialog @radix-ui/react-select
+npm install openai axios
+```
+
+### ETAPA 2: Banco de Dados (PostgreSQL)
+```sql
+-- Schema principal
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  target_score INTEGER DEFAULT 600,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE competencias (
+  id SERIAL PRIMARY KEY,
+  area VARCHAR(50), -- 'matematica' ou 'ciencias'
+  codigo VARCHAR(10), -- 'M1', 'M2', 'CN1', etc.
+  titulo TEXT NOT NULL,
+  descricao TEXT
+);
+
+CREATE TABLE questoes (
+  id SERIAL PRIMARY KEY,
+  competencia_id INTEGER REFERENCES competencias(id),
+  enunciado TEXT NOT NULL,
+  alternativas JSONB NOT NULL, -- {a: "texto", b: "texto", ...}
+  gabarito CHAR(1) NOT NULL,
+  explicacao TEXT NOT NULL,
+  dificuldade INTEGER DEFAULT 2, -- 1=fácil, 2=médio, 3=difícil
+  contexto TEXT, -- situação-problema
+  created_by VARCHAR(20) DEFAULT 'ai' -- 'ai' ou 'manual'
+);
+
+CREATE TABLE user_respostas (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  questao_id INTEGER REFERENCES questoes(id),
+  resposta CHAR(1) NOT NULL,
+  correto BOOLEAN NOT NULL,
+  tempo_segundos INTEGER,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE user_progress (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  competencia_id INTEGER REFERENCES competencias(id),
+  nivel_atual INTEGER DEFAULT 1, -- 1=básico, 2=intermediário, 3=avançado
+  acertos INTEGER DEFAULT 0,
+  tentativas INTEGER DEFAULT 0,
+  updated_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+### ETAPA 3: n8n Workflows
+
+#### Workflow 1: Diagnóstico Inicial
+```json
+{
+  "nodes": [
+    {
+      "name": "Webhook - Iniciar Diagnóstico",
+      "type": "webhook",
+      "webhookId": "diagnostico-inicial"
+    },
+    {
+      "name": "Buscar Questões Base",
+      "type": "postgres",
+      "query": "SELECT * FROM questoes WHERE dificuldade = 2 ORDER BY RANDOM() LIMIT 20"
+    },
+    {
+      "name": "Preparar Simulado",
+      "type": "code",
+      "code": "// Formatar questões para o frontend"
+    },
+    {
+      "name": "Resposta ao Frontend",
+      "type": "webhook-response"
+    }
+  ]
+}
+```
+
+#### Workflow 2: Gerar Questão via IA
+```json
+{
+  "nodes": [
+    {
+      "name": "Webhook - Solicitar Questão",
+      "type": "webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "gerar-questao"
+      }
+    },
+    {
+      "name": "Buscar Perfil Usuário",
+      "type": "postgres",
+      "query": "SELECT * FROM user_progress WHERE user_id = {{$json.user_id}}"
+    },
+    {
+      "name": "Chamar OpenAI",
+      "type": "openai",
+      "prompt": "PROMPT_GERAR_QUESTAO_ENEM"
+    },
+    {
+      "name": "Validar e Salvar",
+      "type": "code"
+    },
+    {
+      "name": "Retornar Questão",
+      "type": "webhook-response"
+    }
+  ]
+}
+```
+
+#### Workflow 3: Avaliar Resposta
+```json
+{
+  "nodes": [
+    {
+      "name": "Webhook - Receber Resposta",
+      "type": "webhook"
+    },
+    {
+      "name": "Verificar Gabarito",
+      "type": "postgres"
+    },
+    {
+      "name": "Calcular TRI Simplificado",
+      "type": "code"
+    },
+    {
+      "name": "Atualizar Progresso",
+      "type": "postgres"
+    },
+    {
+      "name": "Gerar Feedback",
+      "type": "openai"
+    }
+  ]
+}
+```
+
+### ETAPA 4: Prompts OpenAI Otimizados
+
+#### Prompt para Geração de Questões
+```
+CONTEXTO: Você é especialista em criar questões de MATEMÁTICA para o ENEM.
+
+COMPETÊNCIA: {{competencia}}
+NÍVEL: {{nivel}} (1=básico, 2=médio, 3=avançado)
+PERFIL DO ALUNO: {{perfil_aluno}}
+
+INSTRUÇÕES OBRIGATÓRIAS:
+1. Crie UMA questão contextualizada (situação real, gráfico, tabela)
+2. Estilo ENEM: interpretação + cálculo + raciocínio lógico
+3. 5 alternativas plausíveis (A, B, C, D, E)
+4. Inclua distratores inteligentes (erros comuns)
+
+FORMATO DE RESPOSTA (JSON):
+{
+  "enunciado": "Texto completo da questão com contexto",
+  "alternativas": {
+    "a": "alternativa A",
+    "b": "alternativa B",
+    "c": "alternativa C",
+    "d": "alternativa D",
+    "e": "alternativa E"
+  },
+  "gabarito": "c",
+  "explicacao": "Resolução passo a passo",
+  "competencia_foco": "código da competência",
+  "dificuldade_estimada": 2,
+  "contexto_aplicado": "breve descrição da situação real usada"
+}
+
+EXEMPLO DE QUALIDADE ESPERADA:
+- Situação: consumo de energia elétrica doméstica
+- Conceito: função linear/proporcionalidade
+- Cálculo: interpretação de gráfico + regra de três
+- Pegadinha: unidades de medida diferentes
+
+CRIE A QUESTÃO AGORA:
+```
+
+#### Prompt para Feedback Educativo
+```
+CONTEXTO: Dar feedback pedagógico sobre resposta de questão ENEM.
+
+DADOS:
+- Questão: {{enunciado}}
+- Resposta correta: {{gabarito}}
+- Resposta do aluno: {{resposta_aluno}}
+- Explicação: {{explicacao_oficial}}
+
+SE ACERTOU:
+- Parabenize de forma motivadora
+- Destaque o conceito aplicado corretamente
+- Sugira próximo tópico relacionado
+
+SE ERROU:
+- Explique o erro sem julgamento
+- Mostre o caminho correto passo a passo
+- Sugira revisão do conceito básico
+- Seja empático e encorajador
+
+TOME CUIDADO:
+- Use linguagem jovem mas respeitosa
+- Seja específico sobre o erro
+- Conecte com aplicações práticas
+- Motive a continuar estudando
+
+RESPONDA EM PORTUGUÊS BRASILEIRO:
+```
+
+### ETAPA 5: Frontend React
+
+#### Componente Principal - Dashboard
+```jsx
+// app/dashboard/page.tsx
+'use client';
+import { useState, useEffect } from 'react';
+import { CompetenciasRadar } from '@/components/CompetenciasRadar';
+import { ProgressoSemanal } from '@/components/ProgressoSemanal';
+import { ProximaQuestao } from '@/components/ProximaQuestao';
+
+export default function Dashboard() {
+  const [userProgress, setUserProgress] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchUserProgress();
+  }, []);
+
+  const fetchUserProgress = async () => {
+    const response = await fetch('/api/user/progress');
+    const data = await response.json();
+    setUserProgress(data);
+    setLoading(false);
+  };
+
+  if (loading) return <div>Carregando seu progresso...</div>;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      <div className="container mx-auto p-6">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Seu Progresso no ENEM 🎯
+          </h1>
+          <p className="text-gray-600">
+            Faltam {userProgress.diasParaEnem} dias para o ENEM
+          </p>
+        </header>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <CompetenciasRadar data={userProgress.competencias} />
+          <ProgressoSemanal data={userProgress.semanal} />
+          <ProximaQuestao userId={userProgress.userId} />
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+
+#### Componente - Questão ENEM
+```jsx
+// components/QuestaoEnem.tsx
+'use client';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+
+interface QuestaoProps {
+  questao: {
+    id: number;
+    enunciado: string;
+    alternativas: Record<string, string>;
+    competencia: string;
+  };
+  onResponder: (resposta: string) => void;
+}
+
+export function QuestaoEnem({ questao, onResponder }: QuestaoProps) {
+  const [respostaSelecionada, setRespostaSelecionada] = useState('');
+  const [tempo, setTempo] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => setTempo(t => t + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleSubmit = () => {
+    onResponder(respostaSelecionada);
+  };
+
+  return (
+    <Card className="max-w-4xl mx-auto">
+      <CardHeader>
+        <div className="flex justify-between items-center">
+          <span className="text-sm font-medium text-blue-600">
+            {questao.competencia}
+          </span>
+          <span className="text-sm text-gray-500">
+            ⏱️ {Math.floor(tempo / 60)}:{String(tempo % 60).padStart(2, '0')}
+          </span>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="space-y-6">
+        <div className="prose prose-sm">
+          <p className="text-gray-800 leading-relaxed">
+            {questao.enunciado}
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          {Object.entries(questao.alternativas).map(([letra, texto]) => (
+            <label key={letra} className="flex items-start space-x-3 cursor-pointer">
+              <input
+                type="radio"
+                name="resposta"
+                value={letra}
+                checked={respostaSelecionada === letra}
+                onChange={(e) => setRespostaSelecionada(e.target.value)}
+                className="mt-1"
+              />
+              <span className="text-sm">
+                <strong>{letra.toUpperCase()})</strong> {texto}
+              </span>
+            </label>
+          ))}
+        </div>
+
+        <Button 
+          onClick={handleSubmit}
+          disabled={!respostaSelecionada}
+          className="w-full"
+        >
+          Confirmar Resposta
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### ETAPA 6: APIs Next.js
+
+#### API - Buscar Nova Questão
+```typescript
+// app/api/questao/nova/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  try {
+    const { userId } = await req.json();
+    
+    // Chamar workflow n8n
+    const n8nResponse = await fetch(`${process.env.N8N_URL}/webhook/gerar-questao`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId })
+    });
+    
+    const questao = await n8nResponse.json();
+    
+    return NextResponse.json(questao);
+  } catch (error) {
+    return NextResponse.json({ error: 'Erro ao gerar questão' }, { status: 500 });
+  }
+}
+```
+
+#### API - Avaliar Resposta
+```typescript
+// app/api/questao/avaliar/route.ts
+export async function POST(req: NextRequest) {
+  try {
+    const { userId, questaoId, resposta, tempo } = await req.json();
+    
+    // Chamar workflow n8n de avaliação
+    const avaliacao = await fetch(`${process.env.N8N_URL}/webhook/avaliar-resposta`, {
+      method: 'POST',
+      body: JSON.stringify({
+        user_id: userId,
+        questao_id: questaoId,
+        resposta: resposta,
+        tempo_segundos: tempo
+      })
+    });
+    
+    const resultado = await avaliacao.json();
+    
+    return NextResponse.json({
+      correto: resultado.correto,
+      feedback: resultado.feedback,
+      explicacao: resultado.explicacao,
+      novoNivel: resultado.novo_nivel
+    });
+  } catch (error) {
+    return NextResponse.json({ error: 'Erro na avaliação' }, { status: 500 });
+  }
+}
+```
+
+### ETAPA 7: Analytics de Performance
+
+#### Tracker de Métricas
+```typescript
+// lib/analytics.ts
+interface EventData {
+  userId: number;
+  action: string;
+  questaoId?: number;
+  competencia?: string;
+  correto?: boolean;
+  tempo?: number;
+  dificuldade?: number;
+}
+
+export class ENEMAnalytics {
+  static async track(event: EventData) {
+    try {
+      await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...event,
+          timestamp: new Date().toISOString(),
+          session: window.sessionStorage.getItem('session_id')
+        })
+      });
+    } catch (error) {
+      console.error('Analytics error:', error);
+    }
+  }
+}
+
+// Uso nos componentes:
+// ENEMAnalytics.track({ userId: 1, action: 'questao_respondida', questaoId: 123, correto: true, tempo: 90 });
+```
+
+## 🚀 Ordem de Implementação Recomendada
+
+### Fase 1: Fundação
+- Setup Next.js + TypeScript + Tailwind
+- Configuração PostgreSQL + schema
+- Setup n8n + webhooks básicos
+- Seed inicial do banco
+
+### Fase 2: Backend Core
+- Workflows n8n principais
+- Integração OpenAI + prompts
+- APIs Next.js essenciais
+- Sistema TRI simplificado
+
+### Fase 3: Frontend MVP
+- Dashboard estudantil
+- Componente de questão
+- Sistema de feedback
+- Interface de progresso
+
+### Fase 4: Refinamento
+- Testes com questões reais
+- Otimização de prompts
+- Analytics e métricas
+- Deploy e validação
+
+## ⚠️ Pontos Críticos de Atenção
+
+1. **Créditos OpenAI Limitados**
+   - Use cache agressivo para questões geradas
+   - Implemente fallback com questões pré-cadastradas
+   - Monitore uso de tokens
+
+2. **Qualidade das Questões IA**
+   - Valide SEMPRE o JSON de resposta
+   - Tenha banco de backup manual
+   - Implemente sistema de rating das questões
+
+3. **Performance do Sistema TRI**
+   - Use aproximações matemáticas simples
+   - Cache cálculos complexos
+   - Otimize queries do PostgreSQL
+
+4. **Validação para TCC**
+   - Implemente tracking detalhado desde o início
+   - Colete dados anonimizados
+   - Prepare métricas para análise estatística
+
+## 🎯 Resultado Esperado
+
+Ao final da implementação, você terá:
+- ✅ MVP funcional do ENEM.AI
+- ✅ Sistema de questões personalizadas via IA
+- ✅ Dashboard de progresso estudantil
+- ✅ Dados para validação científica
+- ✅ Base sólida para o TCC
+
+**Este prompt foi otimizado para maximizar o resultado com mínimo de iterações. Siga a sequência exata e terá um MVP robusto em 4 semanas!**
