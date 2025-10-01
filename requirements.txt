@@ -1,7 +1,7 @@
 alabaster==0.7.12
 alembic==1.16.1
 altair==5.4.1
-anaconda-client==1.11.1
+anaconda-client==1.13.0
 anaconda-navigator==2.4.0
 anaconda-project==0.11.1
 annotated-types==0.7.0
