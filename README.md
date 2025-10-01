@@ -24,3 +24,51 @@ Acesse a versão demo: [https://mzhyi8c1xwnd.manus.space/](https://mzhyi8c1xwnd.
    git clone https://github.com/eumoas/menthormath.git
    cd menthormath
 
+Crie o ambiente virtual
+
+python -m venv venv
+venv\Scripts\activate  # Windows
+
+
+Instale as dependências
+
+pip install -r requirements.txt
+
+
+Configure as variáveis de ambiente: Crie um arquivo .env na raiz:
+
+XAI_API_KEY=sua_chave_aqui
+
+
+Execute a aplicação
+
+python app.py
+
+´´´
+
+## Funcionalidades
+
+Diagnóstico inicial de conhecimento
+
+Geração de questões via IA
+
+Sistema de avaliação com feedback
+
+Dashboard de progresso
+
+Tracking de performance
+
+## Contribuindo
+
+Este é um projeto acadêmico (TCC). Sugestões e feedback são bem-vindos através de issues.
+
+## Licença
+
+Projeto acadêmico - TCC
+
+## Autor
+
+Desenvolvido para Trabalho de Conclusão de Curso
+
+## Contato
+GitHub: @eumoas
