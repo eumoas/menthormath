@@ -24,7 +24,11 @@ app.register_blueprint(sessao_estudo_bp, url_prefix='/api')
 # app.register_blueprint(ia_bp, url_prefix='/api/ia')  # Comentado temporariamente
 
 # Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+DATABASE_URL = os.getenv('DATABASE_URL')
+# O Railway usa 'postgres://' mas SQLAlchemy espera 'postgresql://'
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
