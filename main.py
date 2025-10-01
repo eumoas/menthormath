@@ -5,10 +5,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
-from src.models.user import db
-from src.routes.user import user_bp
-from src.routes.questao import questao_bp
-from src.routes.sessao_estudo import sessao_estudo_bp
+from .models.user import db
+from .routes.user import user_bp
+from .routes.questao import questao_bp
+from .routes.sessao_estudo import sessao_estudo_bp
 # from src.routes.ia import ia_bp  # Comentado temporariamente para deploy
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
@@ -35,8 +35,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # Importar todos os modelos para garantir que as tabelas sejam criadas
-from src.models.questao import Questao
-from src.models.sessao_estudo import SessaoEstudo
+from .models.questao import Questao
+from .models.sessao_estudo import SessaoEstudo
 
 with app.app_context():
     db.create_all()
