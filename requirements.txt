@@ -1,14 +1,7 @@
-flask==2.2.2
-gunicorn==23.0.0          # servidor de produção
-sqlalchemy==1.4.39        # ORM (se usar banco)
-psycopg2-binary==2.9.9    # driver PostgreSQL (se usar)
-python-dotenv==1.1.1      # para variáveis de ambiente
-pandas==2.3.2             # se seu app usa pandas
-numpy==1.23.5             # se precisar de cálculos
-scikit-learn==1.3.0       # se tiver ML
-xgboost==3.0.4            # se usar XGBoost
-flask==2.2.2
-gunicorn==23.0.0
-numpy==1.23.5
-scikit-learn==1.3.0
-xgboost==3.0.4
+flask
+gunicorn
+sqlalchemy
+psycopg2-binary
+python-dotenv
+pandas
+numpy
